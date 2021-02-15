@@ -1,0 +1,33 @@
+{
+  "name": "bulbasaur",
+  "version": "1.0.0",
+  "description": "NENT Tech Trainee 2021: Frontend Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Louliett/bulbasaur.git"
+  },
+  "keywords": [
+    "React",
+    "Node",
+    "MongoDB"
+  ],
+  "author": "Andrei Casian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Louliett/bulbasaur/issues"
+  },
+  "homepage": "https://github.com/Louliett/bulbasaur#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.15",
+    "morgan": "^1.10.0"
+  }
+}

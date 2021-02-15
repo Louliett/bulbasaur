@@ -1,0 +1,29 @@
+.modal_bottom {
+    position: relative;
+    text-align: center;
+    height: 100%;
+}
+
+.left_item {
+    display: inline-block;
+    height: inherit;
+    width: 90%;
+    vertical-align: baseline;
+    text-align: left;
+    height: 40px;
+    vertical-align: top;
+}
+
+.right_item {
+    display: inline-block;
+    height: inherit;
+    width: 10%;
+    height: 40px;
+    vertical-align: top;
+}
+
+.left_item > span {
+    display: inline-block;
+    text-align: left;
+    margin-right: 5px;
+}
