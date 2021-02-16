@@ -47,4 +47,8 @@ To have alongide a running server, the react app contains a `proxy` in its `pack
 # Demo
 
 ## Default state when app is open
+<<<<<<< HEAD
 <img src="./demo_images/default.png" alt="No Image"/>
+=======
+<img src="./demo_images/default.png" alt="No Image"/>
+>>>>>>> 1f833bd7bfe0b8a838f83637b5852eda40c08809
