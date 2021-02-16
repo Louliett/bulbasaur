@@ -47,16 +47,25 @@ To have alongide a running server, the react app contains a `proxy` in its `pack
 # Demo
 
 ## Default state when app is open
-<img src="./demo_images/default.png" alt="No Image"/>
+- A grid of restaurant objects.
+- Each restaurant card contains a picture, name, some description.
+- Each card contains rating indicated by stars and price level by dollar sign with number.
+- Some restaurants don't have price level, hence the dollar sign is without number.
+<img src="./demo_images/default.png" alt="No Image" border="2"/>
 
 ## Filter by restaurants open all week
-<img src="./demo_images/filter_by_open.png" alt="No Image"/>
+- Filtering bar can accept multiple filters.
+<img src="./demo_images/filter_by_open.png" alt="No Image" border="2"/>
 
 ## Filter by restaurants open all week and sort by price level ascending
-<img src="./demo_images/filter_by_open_sorted_by_price.png" alt="No Image"/>
+- Sorting works on filtered items
+<img src="./demo_images/filterd_by_open_sorted_by_price.png" alt="No Image" border="2"/>
 
 ## Click on a restaurant card to open a modal with information
-<img src="./demo_images/open_modal.png" alt="No Image"/>
+- The modal contains the name of the restaurant, photo, address, phone number and website.
+- Moreover it contains opening hours, a clickable google icon for directions and precise rating and price level.
+<img src="./demo_images/open_modal.png" alt="No Image" border="2"/>
 
 ## Dynamic Pagination
-<img src="./demo_images/pagination.png" alt="No Image"/>
+- The pagination changes dynamically according to the data.
+<img src="./demo_images/pagination.png" alt="No Image" border="2"/>
