@@ -27,17 +27,7 @@ export function RestaurantListContainer() {
         } 
         if (sorting.length === 0 && filters.length === 0) {
             dispatch(restActions.getRestaurants(currentPage, restPerPage));
-        } 
-        // if(filters.length === 0 && sorting.length === 0) {
-        //     dispatch(restActions.getRestaurants(currentPage, restPerPage));
-        // } else if (filters.length === 0 && sorting.length > 0) {
-        //     dispatch(restActions.sortRestaurants(sorting, filteredItems, currentPage, restPerPage));
-        // } else if (filters.length > 0 && sorting.length === 0) {
-        //     dispatch(restActions.filterRestaurants(filters, filteredItems, currentPage, restPerPage));
-        // } else {
-        //     dispatch(restActions.filterRestaurants(filters, filteredItems, currentPage, restPerPage));
-        //     dispatch(restActions.sortRestaurants(sorting, filteredItems, currentPage, restPerPage));
-        // }
+        }
     }, [currentPage, filters, sorting]);
 
     function handlePageChange(event, data) {
