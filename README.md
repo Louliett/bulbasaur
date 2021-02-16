@@ -59,7 +59,7 @@ To have alongide a running server, the react app contains a `proxy` in its `pack
 
 ## Filter by restaurants open all week and sort by price level ascending
 - Sorting works on filtered items
-<img src="./demo_images/filterd_by_open_sorted_by_price.png" alt="No Image" border="2"/>
+<img src="./demo_images/filtered_by_open_sorted_by_price.png" alt="No Image" border="2"/>
 
 ## Click on a restaurant card to open a modal with information
 - The modal contains the name of the restaurant, photo, address, phone number and website.
