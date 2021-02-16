@@ -1,31 +1,37 @@
-import { restConstants } from "../redux/constants";
+import { filterService } from './filter.service';
+import { sortService } from './sort.service';
 
 const API_URL = 'http://localhost:8080/restaurants/';
 
 export const restService = {
     getRestaurants,
     getRestaurant,
-    getRestPerPage,
-    getRestSortByRatingAsc,
-    getRestSortByRatingDes,
-    getRestSortByPriceLvlAsc,
-    getRestSortByPriceLvlDes,
-    renderSortingState,
-    getOpenHoursTest,
-    getRestFiltered
+    paginateRestaurants,
+    filterRestaurants,
+    sortRestaurants
 }
 
-async function getRestaurants() {
+
+//gets all restaurants from db and paginates them
+async function getRestaurants(page, restPerPage) {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
-      };
-      
-      let response = await fetch(API_URL, requestOptions);
-      let message =  await response.json();
-      return message;
+    };
+    
+    let response = await fetch(API_URL, requestOptions);
+    let restaurants =  await response.json();
+    let paginatedRest = restService.paginateRestaurants(restaurants, page, restPerPage);
+    let rest = {
+        allItems: restaurants,
+        totalPages: paginatedRest[0],
+        paginatedItems: paginatedRest[1]
+    }
+
+    return rest;
 }
 
+//gets a single restaurant from db based on id
 async function getRestaurant(restId) {
     var requestOptions = {
         method: 'GET',
@@ -37,119 +43,56 @@ async function getRestaurant(restId) {
     return message;
 }
 
-async function getRestPerPage(page_number, rest_per_page) {
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-    let response = await fetch(API_URL + page_number + "/" + rest_per_page, requestOptions);
-    let message = await response.json();
-    return message;
+
+// function to paginate all restaurants based on page number and items per page
+// returns and array with the total amount of pages at index 0 and items on a specific page at index 1
+function paginateRestaurants(restaurants, page, perPage) {
+    var high;
+    var low;
+    var total_pages = Math.ceil(restaurants.length / perPage);
+  
+    if (restaurants.length > perPage) {
+        high = page * perPage;
+        low = ((page - 1) * perPage);
+        return [total_pages, restaurants.slice(low, high)];
+    } else {
+        high = restaurants.length;
+        low = 1;
+        return [total_pages, restaurants];
+    }
+  }
+  
+
+  function filterRestaurants(filters, restaurants) {
+        //list of possible filters
+        let isOpen = 'is_open_all_week';
+        let hasPriceLevel = 'has_price_level';
+    
+        if(filters.includes(isOpen !== undefined && hasPriceLevel === undefined)) {
+            //user requested ONLY open_all_week filter
+            return filterService.filterOpeningHours(true, restaurants);
+        } else if(filters.includes(isOpen === undefined && hasPriceLevel !== undefined)) {
+            //user requested only has_price_level filter
+            return filterService.filterByPriceLevelExists(true, restaurants);
+        } else {
+            //user requested both filters
+            //here we need to respect the order of filters
+            return filterService.filterInOrder(filters, restaurants);
+        }
   }
 
-async function getRestSortByRatingAsc(page_number, rest_per_page) {
-  var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  
-  let response = await fetch(API_URL + page_number + '/' + rest_per_page + "/sort-by-rating-ascending", requestOptions)
-  let message = await response.json();
-  return message;
-}
+  function sortRestaurants(sorting, restaurants) {
 
-async function getRestSortByRatingDes(page_number, rest_per_page) {
-  var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  
-  let response = await fetch(API_URL + page_number + '/' + rest_per_page + "/sort-by-rating-descending", requestOptions)
-  let message = await response.json();
-  return message;
-}
-
-async function getRestSortByPriceLvlAsc(page_number, rest_per_page) {
-  var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  
-  let response = await fetch(API_URL + page_number + '/' + rest_per_page + "/sort-by-pricelvl-ascending", requestOptions)
-  let message = await response.json();
-  return message;
-}
-
-async function getRestSortByPriceLvlDes(page_number, rest_per_page) {
-  var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  
-  let response = await fetch(API_URL + page_number + '/' + rest_per_page + "/sort-by-pricelvl-descending", requestOptions)
-  let message = await response.json();
-  return message;
-}
-
-function renderSortingState(sortingState, dispatch, restActions, currentPage, restPerPage) {
-
-  switch(sortingState) {
-    case '':
-        dispatch(restActions.getRestPerPage(currentPage, restPerPage))
-        break;
-    case 'rating_asc':
-        dispatch(restActions.getRestSortByRatingAsc(currentPage, restPerPage))
-        break;
-    case 'rating_des':
-        dispatch(restActions.getRestSortByRatingDes(currentPage, restPerPage));
-        break;
-    case 'price_asc':
-        dispatch(restActions.getRestSortByPriceLvlAsc(currentPage, restPerPage));
-        break;
-    case 'price_des':
-        dispatch(restActions.getRestSortByPriceLvlDes(currentPage, restPerPage));
-        break;
-    default:
-        dispatch(restActions.getRestPerPage(currentPage, restPerPage))
-  }
-}
-
-async function getOpenHoursTest(isOpen, page, restPerPage) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
-    "hasPriceLevel": isOpen
-  });
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-  let message = await fetch(API_URL + page + '/' + restPerPage + "/opening-hours", requestOptions);
-  let response = await message.json();
-  return response;
-}
-
-async function getRestFiltered (filters, page, restPerPage) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
-    "filters": filters
-  });
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-  let message = await fetch(API_URL + page + '/' + restPerPage +"/filter", requestOptions)
-  let response = await message.json();
-  return response;
+    switch(sorting) {
+        case 'price_asc':
+            return sortService.sortByPriceAscending(restaurants);
+        case 'price_des':
+            return sortService.sortByPriceDescending(restaurants);
+        case 'rating_asc':
+            return sortService.sortByRatingAscending(restaurants);
+        case 'rating_des':
+            return sortService.sortByRatingDescending(restaurants);
+        default:
+            return '';
+    }
 }

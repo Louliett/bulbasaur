@@ -2,36 +2,43 @@ import { useEffect } from 'react';
 import { RestaurantList } from './RestaurantList';
 import { useDispatch, useSelector } from 'react-redux';
 import { restActions } from '../../../redux/actions';
-import { restService } from '../../../services/restaurant.service';
 
 export function RestaurantListContainer() {
 
+    console.log(' runs ');
+
     const dispatch = useDispatch();
-    const restaurants = useSelector(state => (state.restReducer.items));
+    const allItems = useSelector(state => (state.restReducer.allItems));
+    const paginatedItems = useSelector(state => (state.restReducer.paginatedItems));
+    const filteredItems = useSelector(state => (state.restReducer.filteredItems));
     const error = useSelector(state => (state.restReducer.error));
     const totalPages = useSelector(state => (state.restReducer.totalPages));
     const currentPage = useSelector(state => (state.restReducer.currentPage));
     const restPerPage = 8; //The user can decide how many restaurants to show per page and the server will handle it.
-    const sortingState = useSelector(state => (state.restReducer.sortingState));
+    const sorting = useSelector(state => (state.restReducer.sorting));
     const filters = useSelector(state => (state.restReducer.filters));
 
     useEffect(() => {
-        //dispatch(restActions.getRestPerPage(currentPage, restPerPage));
-        restService.renderSortingState(sortingState, dispatch, restActions, currentPage, restPerPage);  
-
-        if(filters.length > 0) {
-            dispatch(restActions.getRestFiltered(filters, currentPage, restPerPage));
+        if (filters.length > 0) {
+            dispatch(restActions.filterRestaurants(filters, filteredItems, currentPage, restPerPage));
         }
-        // switch(filterAmount) {
-        //     case []:
-        //         return;
-        //     case 1:
-        //         dispatch(restActions.getOpenHoursTest(true, currentPage, restPerPage));
-        //         break;
-        //     default:
-        //         return;
+        if (sorting.length > 0) {
+            dispatch(restActions.sortRestaurants(sorting, filteredItems, currentPage, restPerPage));
+        } 
+        if (sorting.length === 0 && filters.length === 0) {
+            dispatch(restActions.getRestaurants(currentPage, restPerPage));
+        } 
+        // if(filters.length === 0 && sorting.length === 0) {
+        //     dispatch(restActions.getRestaurants(currentPage, restPerPage));
+        // } else if (filters.length === 0 && sorting.length > 0) {
+        //     dispatch(restActions.sortRestaurants(sorting, filteredItems, currentPage, restPerPage));
+        // } else if (filters.length > 0 && sorting.length === 0) {
+        //     dispatch(restActions.filterRestaurants(filters, filteredItems, currentPage, restPerPage));
+        // } else {
+        //     dispatch(restActions.filterRestaurants(filters, filteredItems, currentPage, restPerPage));
+        //     dispatch(restActions.sortRestaurants(sorting, filteredItems, currentPage, restPerPage));
         // }
-    }, [currentPage, sortingState, filters]);
+    }, [currentPage, filters, sorting]);
 
     function handlePageChange(event, data) {
         dispatch(restActions.setCurrentPage(data.activePage));
@@ -42,19 +49,16 @@ export function RestaurantListContainer() {
     }
 
     function handleSortChange(event, data) {
-        console.log(data);
-        dispatch(restActions.setSortingState(data.value));
+        dispatch(restActions.setSorting(data.value));
     }
 
     function handleFilterChange(event, data) {
-        console.log(data);
-        //dispatch(restActions.setFilterAmount(data.value.length));
-        dispatch(restActions.setFilters(data.value))
+        dispatch(restActions.setFilters(data.value));
     }
 
     return (
         <RestaurantList
-            restaurants={restaurants}
+            restaurants={paginatedItems}
             error={error}
             onInspect={handleInspect}
             totalPages={totalPages}

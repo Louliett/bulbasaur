@@ -7,6 +7,7 @@ export function RestaurantModal(props) {
 
     return (
         <Modal open={props.open}>
+            {console.log(props.open, ' modal')}
             <span>{props.error}</span>
             <Modal.Header>{props.restInfo.name}</Modal.Header>
             <Modal.Content image>
@@ -25,7 +26,7 @@ export function RestaurantModal(props) {
                         <Icon name='phone' />
                         {props.restInfo.phone_number}
                     </HeaderSubheader>
-                    <a href={props.restInfo.website} target="_blank" without rel="noreferrer" >
+                    <a href={props.restInfo.website} target="_blank" without="true" rel="noreferrer" >
                         {props.restInfo.website}
                     </a>
                     <List>
@@ -42,7 +43,7 @@ export function RestaurantModal(props) {
             <Modal.Actions className='modal_bottom'>
                 <div className='left_item'>
                 <span className='google_icon'>
-                    <a href={props.restInfo.google_maps_url} target="_blank" without rel="noreferrer">
+                    <a href={props.restInfo.google_maps_url} target="_blank" without="true" rel="noreferrer">
                         <Image 
                             size='mini' 
                             src={google_icon} 

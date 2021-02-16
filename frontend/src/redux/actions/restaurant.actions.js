@@ -3,60 +3,50 @@ import { restService } from '../../services/restaurant.service';
 
 export const restActions = {
     getRestaurants,
-    getRestPerPage,
     setCurrentPage,
     openModal,
     closeModal,
-    setSortingState,
-    getRestSortByRatingAsc,
-    getRestSortByRatingDes,
-    getRestSortByPriceLvlAsc,
-    getRestSortByPriceLvlDes,
-    getOpenHoursTest,
-    setFilterAmount,
     setFilters,
-    getRestFiltered
+    filterRestaurants,
+    setSorting,
+    sortRestaurants
 }
 
 
-function getRestaurants() {
+//gets all restaurants and returns them paginated
+function getRestaurants(page, restPerPage) {
 
     return dispatch => {
         dispatch(request());
 
-        restService.getRestaurants()
-        .then(restaurants => dispatch(success(restaurants)))
-        .catch(error => dispatch(failure(error)));
+        restService.getRestaurants(page, restPerPage)
+        .then((restaurants) => { dispatch(success(restaurants)) })
+        .catch((error) => dispatch(failure(error)));
     }
 
     function request() { return { type: restConstants.GETALL_REQUEST } }
-    function success(restaurants) { return { type: restConstants.GETALL_SUCCESS, payload: restaurants } }
+    function success(rest) { 
+        return { 
+            type: restConstants.GETALL_SUCCESS, 
+            payload: { 
+                totalPages: rest.totalPages, 
+                allItems: rest.allItems,
+                paginatedItems: rest.paginatedItems
+            }
+        } 
+    }
     function failure(error) { return { type: restConstants.GETALL_FAILURE, payload: error } }
 }
 
 
-function getRestPerPage(page_number, rest_per_page) {
-
-    return dispatch => {
-        dispatch(request());
-
-        restService.getRestPerPage(page_number, rest_per_page)
-        .then(restaurants => dispatch(success(restaurants[0], restaurants[1])))
-        .catch(error => dispatch(failure(error)));
-    }
-
-    function request() { return { type: restConstants.PERPAGE_REQUEST } }
-    function success(totalPages, restaurants) { return { type: restConstants.PERPAGE_SUCCESS, payload: { totalPages, restaurants } } }
-    function failure(error) { return { type: restConstants.PERPAGE_FAILURE, payload: error } }
-}
-
-
+//sets the current page
 function setCurrentPage(page_number) {
     return { type: restConstants.SETCURRENT_PAGE, payload: page_number }
 }
 
-function openModal(restaurant) {
 
+//opens a modal with restaurant info
+function openModal(restaurant) {
     return { 
         type: restConstants.OPEN_MODAL, 
         payload: {
@@ -67,145 +57,63 @@ function openModal(restaurant) {
 }
 
 
+//closes the modal with restaurant info
 function closeModal() {
     return { type: restConstants.CLOSE_MODAL, payload:false }
 }
 
-function getRestSortByRatingAsc(page_number, rest_per_page) {
 
-    return dispatch => {
-        dispatch(request());
-
-        restService.getRestSortByRatingAsc(page_number, rest_per_page)
-        .then((restaurants) => { dispatch(success(restaurants[0], restaurants[1])) })
-        .catch((error) => { dispatch(failure(error)) })
-    }
-
-    function request() { 
-        return {type: restConstants.SORT_RATING_ASC_REQUEST } }
-    function success(totalPages, restaurants) { 
-        return { 
-            type: restConstants.SORT_RATING_ASC_SUCCESS, 
-            payload: { totalPages, restaurants }  
-        } 
-    }
-    function failure(error) { return {type: restConstants.SORT_RATING_ASC_FAILURE, payload: error } }
-}
-
-function getRestSortByRatingDes(page_number, rest_per_page) {
-
-    return dispatch => {
-        dispatch(request());
-
-        restService.getRestSortByRatingDes(page_number, rest_per_page)
-        .then((restaurants) => { dispatch(success(restaurants[0], restaurants[1])) })
-        .catch((error) => { dispatch(failure(error)) })
-    }
-
-    function request() { return {type: restConstants.SORT_RATING_DES_REQUEST } }
-    function success(totalPages, restaurants) { 
-        return { 
-            type: restConstants.SORT_RATING_DES_SUCCESS, 
-            payload: { totalPages, restaurants } 
-        } 
-    }
-    function failure(error) { return {type: restConstants.SORT_RATING_DES_FAILURE, payload: error } }
-}
-
-function getRestSortByPriceLvlAsc(page_number, rest_per_page) {
-
-    return dispatch => {
-        dispatch(request());
-
-        restService.getRestSortByPriceLvlAsc(page_number, rest_per_page)
-        .then((restaurants) => { dispatch(success(restaurants[0], restaurants[1])) })
-        .catch((error) => { dispatch(failure(error)) })
-    }
-
-    function request() { return {type: restConstants.SORT_PRICELVL_ASC_REQUEST } }
-    function success(totalPages, restaurants) { 
-        return { 
-            type: restConstants.SORT_PRICELVL_ASC_SUCCESS, 
-            payload: { totalPages, restaurants } 
-        } 
-    }
-    function failure(error) { return {type: restConstants.SORT_PRICELVL_ASC_FAILURE, payload: error } }
-}
-
-function getRestSortByPriceLvlDes(page_number, rest_per_page) {
-
-    return dispatch => {
-        dispatch(request());
-
-        restService.getRestSortByPriceLvlDes(page_number, rest_per_page)
-        .then((restaurants) => { dispatch(success(restaurants[0], restaurants[1])) })
-        .catch((error) => { dispatch(failure(error)) })
-    }
-
-    function request() { return {type: restConstants.SORT_PRICELVL_DES_REQUEST } }
-    function success(totalPages, restaurants) { 
-        return { 
-            type: restConstants.SORT_PRICELVL_DES_SUCCESS, 
-            payload: { totalPages, restaurants } 
-        } 
-    }
-    function failure(error) { return {type: restConstants.SORT_PRICELVL_DES_FAILURE, payload: error } }
-}
-
-function setSortingState(sorting_state) {
-    return { type: restConstants.SET_SORTING_STATE, payload: sorting_state }
-}
-
-function getOpenHoursTest(isOpen, page, restPerPage) {
-
-    return dispatch => {
-        dispatch(request());
-
-        restService.getOpenHoursTest(isOpen, page, restPerPage)
-        .then((restaurants) => { dispatch(success(restaurants[0], restaurants[1])) })
-        .catch((error) => { dispatch(failure(error)) });
-    }
-
-    function request() { return { type: restConstants.GET_OPEN_HOURS_REQUEST } }
-    function success(totalPages, restaurants) { 
-        return { 
-            type: restConstants.GET_OPEN_HOURS_SUCCESS, 
-            payload: {totalPages, restaurants} 
-        }
-    }
-    function failure(error) { return { type: restConstants.GET_OPEN_HOURS_FAILURE, payload: error } }
-}
-
-function setFilterAmount(amount) {
-    return {
-        type: restConstants.SET_FILTER_AMOUNT,
-        payload: amount
-    }
-}
-
+//sets current filters applied on items
 function setFilters(filters) {
+
     return {
         type: restConstants.SET_FILTERS,
         payload: filters
     }
 }
 
-function getRestFiltered(filters, page, restPerPage) {
+//filters restaurants based on array of filters
+//returns filtered restaurants in paginated form
+function filterRestaurants(filters, restaurants, page, restPerPage) {
 
-    return dispatch => {
+    let filtered = restService.filterRestaurants(filters, restaurants);
+    let paginated = restService.paginateRestaurants(filtered, page, restPerPage);
 
-        dispatch(request());
-        restService.getRestFiltered(filters, page, restPerPage)
-        .then((items) => { dispatch(success(items[0], items[1])) })
-        .catch((error) => { dispatch(failure(error)) });
+    return {
+        type: restConstants.GET_REST_FILTERED,
+            payload: { 
+                totalPages: paginated[0],
+                filteredItems: filtered,
+                paginatedItems: paginated[1]
+            }
     }
 
-    function request() { return { type: restConstants.GETREST_FILTERED_REQUEST } }
-    function success(totalPages, restaurants) {
-        return {
-            type: restConstants.GETREST_FILTERED_SUCCESS,
-            payload: {totalPages, restaurants}
-        }
+}
+
+//sets current filters applied on items
+function setSorting(sorting) {
+
+    return {
+        type: restConstants.SET_SORTING,
+        payload: sorting
     }
-    function failure(error) { return { type: restConstants.GETREST_FILTERED_FAILURE, payload: error } }
+
+}
+
+//sorts restaurants based on a sorting criteria: price_low_high, rating_high_low etc
+//returns sorted restaurants in paginated form
+function sortRestaurants(sorting, restaurants, page, restPerPage) {
+
+    let sorted = restService.sortRestaurants(sorting, restaurants);
+    let paginated = restService.paginateRestaurants(sorted, page, restPerPage);
+    
+    return {
+        type: restConstants.GET_REST_SORTED,
+            payload: { 
+                totalPages: paginated[0],
+                filteredItems: sorted,
+                paginatedItems: paginated[1]
+            }
+    }
+
 }

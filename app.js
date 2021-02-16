@@ -27,7 +27,6 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
-//app.use(express.static('frontend'));
 
 //API routes
 app.use('/restaurants', restaurantRouter);
