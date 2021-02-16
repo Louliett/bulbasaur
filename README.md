@@ -47,8 +47,16 @@ To have alongide a running server, the react app contains a `proxy` in its `pack
 # Demo
 
 ## Default state when app is open
-<<<<<<< HEAD
 <img src="./demo_images/default.png" alt="No Image"/>
-=======
-<img src="./demo_images/default.png" alt="No Image"/>
->>>>>>> 1f833bd7bfe0b8a838f83637b5852eda40c08809
+
+## Filter by restaurants open all week
+<img src="./demo_images/filter_by_open.png" alt="No Image"/>
+
+## Filter by restaurants open all week and sort by price level ascending
+<img src="./demo_images/filter_by_open_sorted_by_price.png" alt="No Image"/>
+
+## Click on a restaurant card to open a modal with information
+<img src="./demo_images/open_modal.png" alt="No Image"/>
+
+## Dynamic Pagination
+<img src="./demo_images/pagination.png" alt="No Image"/>
