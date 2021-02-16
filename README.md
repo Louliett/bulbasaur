@@ -43,3 +43,8 @@ To have alongide a running server, the react app contains a `proxy` in its `pack
 3. Server terminal: navigate to project folder and run `node server` or `nodemon server` (if you installed `npm nodemon`)
 4. Client terminal: navigate to 'frontend' folder and `npm start`
 5. The app will open automatically in browser, if not open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+# Demo
+
+## Default state when app is open
+<img src="./demo_images/default.png" alt="No Image"/>
